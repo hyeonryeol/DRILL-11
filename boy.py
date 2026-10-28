@@ -86,7 +86,7 @@ class AutoRun:
         self.boy = boy
 
     def enter(self):
-        pass
+        self.boy.auto_run_start_time = get_time()  # 5초 타이머 시작
 
     def exit(self):
         pass
@@ -100,6 +100,9 @@ class AutoRun:
             boy.x, boy.face_dir = 800 - 100, -1
         elif boy.x <= 100:
             boy.x, boy.face_dir = 100, 1
+
+        if get_time() - boy.auto_run_start_time >= 5:
+            boy.time_out()
 
     def draw(self):
         boy = self.boy
@@ -137,6 +140,7 @@ class Boy:
                 {'trigger': 'dir_down', 'source': ['IDLE', 'SLEEP'], 'dest': 'RUN'},
                 {'trigger': 'dir_up', 'source': 'RUN', 'dest': 'IDLE'},
                 {'trigger': 'a_down', 'source': 'IDLE', 'dest': 'AUTO_RUN'},
+                {'trigger': 'time_out', 'source': 'AUTO_RUN', 'dest': 'IDLE'},
             ],
             initial='IDLE',
             auto_transitions=False,
