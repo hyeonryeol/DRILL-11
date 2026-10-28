@@ -1,4 +1,4 @@
-from pico2d import load_image, get_time, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT
+from pico2d import load_image, get_time, clamp, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT
 from transitions import Machine, State
 
 
@@ -70,6 +70,7 @@ class Run:
         boy = self.boy
         boy.frame = (boy.frame + 1) % 8
         boy.x += boy.dir * 10
+        boy.x = clamp(50, boy.x, 800 - 50)  # 소년 폭 100의 절반만큼 안쪽에서 멈춰 화면 밖으로 안 나감
 
     def draw(self):
         boy = self.boy
