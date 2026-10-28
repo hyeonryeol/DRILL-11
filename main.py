@@ -49,6 +49,6 @@ while running:
     handle_events()
     update_world()
     render_world()
-    delay(0.01)
+    delay(0.05)  # 약 20 FPS: 8프레임 애니메이션이 너무 빠르지 않게
 # finalization code
 close_canvas()
