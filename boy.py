@@ -94,7 +94,7 @@ class AutoRun:
     def do(self):
         boy = self.boy
         boy.frame = (boy.frame + 1) % 8
-        boy.x += boy.face_dir * 10
+        boy.x += boy.face_dir * 25  # 일반 RUN(10)보다 2.5배 빠르게
         boy.x = clamp(50, boy.x, 800 - 50)
 
     def draw(self):
