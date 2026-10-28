@@ -95,7 +95,11 @@ class AutoRun:
         boy = self.boy
         boy.frame = (boy.frame + 1) % 8
         boy.x += boy.face_dir * 25  # 일반 RUN(10)보다 2.5배 빠르게
-        boy.x = clamp(100, boy.x, 800 - 100)  # 커진 폭 200의 절반만큼 안쪽에서 멈춤
+        # 화면 좌우 끝(커진 폭 200의 절반만큼 안쪽)에 닿으면 자동으로 방향 전환
+        if boy.x >= 800 - 100:
+            boy.x, boy.face_dir = 800 - 100, -1
+        elif boy.x <= 100:
+            boy.x, boy.face_dir = 100, 1
 
     def draw(self):
         boy = self.boy
