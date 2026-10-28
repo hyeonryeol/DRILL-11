@@ -1,4 +1,5 @@
 from pico2d import load_image
+from transitions import Machine
 
 class Boy:
     def __init__(self):
@@ -7,11 +8,21 @@ class Boy:
         self.face_dir = 1
         self.image = load_image('animation_sheet.png')
 
+        # 현재 소년은 IDLE 상태 하나만 갖는다.
+        self.machine = Machine(
+            model=self,
+            states=['IDLE'],
+            initial='IDLE',
+            auto_transitions=False,
+        )
+
     def update(self):
-        self.frame = (self.frame + 1) % 8
+        if self.state == 'IDLE':
+            self.frame = (self.frame + 1) % 8
 
     def draw(self):
-        if self.face_dir == 1:
-            self.image.clip_draw(self.frame * 100, 300, 100, 100, self.x, self.y)
-        else:
-            self.image.clip_draw(self.frame * 100, 200, 100, 100, self.x, self.y)
+        if self.state == 'IDLE':
+            if self.face_dir == 1:
+                self.image.clip_draw(self.frame * 100, 300, 100, 100, self.x, self.y)
+            else:
+                self.image.clip_draw(self.frame * 100, 200, 100, 100, self.x, self.y)
