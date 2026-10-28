@@ -106,11 +106,11 @@ class AutoRun:
 
     def draw(self):
         boy = self.boy
-        # 2배 크기(200 x 200)로 그림. y는 그림 중심이라 발이 잔디에 닿도록 50 올림
+        # 2배 크기(200 x 200)로 그림. 그림 아래 여백도 2배가 되므로 발 높이가 일반 크기와 같도록 28 올림
         if boy.face_dir == 1:
-            boy.image.clip_draw(boy.frame * 100, 100, 100, 100, boy.x, boy.y + 50, 200, 200)
+            boy.image.clip_draw(boy.frame * 100, 100, 100, 100, boy.x, boy.y + 28, 200, 200)
         else:
-            boy.image.clip_draw(boy.frame * 100, 0, 100, 100, boy.x, boy.y + 50, 200, 200)
+            boy.image.clip_draw(boy.frame * 100, 0, 100, 100, boy.x, boy.y + 28, 200, 200)
 
 
 class Boy:
