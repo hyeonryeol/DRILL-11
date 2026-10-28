@@ -1,5 +1,6 @@
 from pico2d import *
 
+from boy import Boy
 from grass import Grass
 
 
@@ -16,11 +17,15 @@ def handle_events():
 
 def reset_world():
     global world
+    global boy
 
     world = []
 
     grass = Grass()
     world.append(grass)
+
+    boy = Boy()
+    world.append(boy)
 
 
 def update_world():
