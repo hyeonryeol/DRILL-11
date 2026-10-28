@@ -1,4 +1,4 @@
-from pico2d import load_image, get_time
+from pico2d import load_image, get_time, SDL_KEYDOWN, SDLK_SPACE
 from transitions import Machine, State
 
 
@@ -74,12 +74,17 @@ class Boy:
                     for name, obj in self.state_objects.items()],
             transitions=[
                 {'trigger': 'time_out', 'source': 'IDLE', 'dest': 'SLEEP'},
+                {'trigger': 'space_down', 'source': 'SLEEP', 'dest': 'IDLE'},
             ],
             initial='IDLE',
             auto_transitions=False,
             ignore_invalid_triggers=True,  # 지금 상태에 없는 이벤트는 에러 없이 무시
         )
         self.state_objects[self.state].enter()  # 처음 상태는 on_enter가 불리지 않으므로 직접 호출
+
+    def handle_event(self, event):
+        if event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+            self.space_down()
 
     def update(self):
         self.state_objects[self.state].do()
