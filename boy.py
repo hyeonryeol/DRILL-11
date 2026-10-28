@@ -1,4 +1,4 @@
-from pico2d import load_image, get_time, clamp, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT
+from pico2d import load_image, get_time, clamp, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, SDLK_a
 from transitions import Machine, State
 
 
@@ -80,6 +80,31 @@ class Run:
             boy.image.clip_draw(boy.frame * 100, 0, 100, 100, boy.x, boy.y)    # 왼쪽 달리기 줄
 
 
+class AutoRun:
+    """자동 무적 런: 키를 누르지 않아도 바라보는 방향으로 계속 달린다."""
+    def __init__(self, boy):
+        self.boy = boy
+
+    def enter(self):
+        pass
+
+    def exit(self):
+        pass
+
+    def do(self):
+        boy = self.boy
+        boy.frame = (boy.frame + 1) % 8
+        boy.x += boy.face_dir * 10
+        boy.x = clamp(50, boy.x, 800 - 50)
+
+    def draw(self):
+        boy = self.boy
+        if boy.face_dir == 1:
+            boy.image.clip_draw(boy.frame * 100, 100, 100, 100, boy.x, boy.y)
+        else:
+            boy.image.clip_draw(boy.frame * 100, 0, 100, 100, boy.x, boy.y)
+
+
 class Boy:
     def __init__(self):
         self.x, self.y = 400, 90
@@ -95,6 +120,7 @@ class Boy:
             'IDLE': Idle(self),
             'SLEEP': Sleep(self),
             'RUN': Run(self),
+            'AUTO_RUN': AutoRun(self),
         }
         self.machine = Machine(
             model=self,
@@ -105,6 +131,7 @@ class Boy:
                 {'trigger': 'space_down', 'source': 'SLEEP', 'dest': 'IDLE'},
                 {'trigger': 'dir_down', 'source': ['IDLE', 'SLEEP'], 'dest': 'RUN'},
                 {'trigger': 'dir_up', 'source': 'RUN', 'dest': 'IDLE'},
+                {'trigger': 'a_down', 'source': 'IDLE', 'dest': 'AUTO_RUN'},
             ],
             initial='IDLE',
             auto_transitions=False,
@@ -115,6 +142,9 @@ class Boy:
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
             self.space_down()
+            return
+        if event.type == SDL_KEYDOWN and event.key == SDLK_a:
+            self.a_down()
             return
 
         if event.type not in (SDL_KEYDOWN, SDL_KEYUP) or event.key not in (SDLK_LEFT, SDLK_RIGHT):
